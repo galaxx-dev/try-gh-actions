@@ -1,0 +1,26 @@
+{
+	"name": "try_gh_actions",
+	"version": "0.0.1",
+	"description": "Experimenting github actions, git-flow, and testing with jest",
+	"main": "index.js",
+	"scripts": {
+		"watch": "tsc -w",
+		"dev": "ts-node-dev --respawn ./src/index.ts",
+		"dev2": "nodemon ./dist/index.js"
+	},
+	"repository": "https://github.com/galaxx-dev/try-gh-actions.git",
+	"author": "Dio Ilham Djatiadi",
+	"license": "MIT",
+	"private": false,
+	"dependencies": {
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/node": "^16.11.11",
+		"nodemon": "^2.0.15",
+		"ts-node-dev": "^1.1.8",
+		"tsconfig.json": "^1.0.10",
+		"typescript": "^4.5.2"
+	}
+}
