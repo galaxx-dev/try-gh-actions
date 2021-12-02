@@ -1,6 +1,14 @@
 name: GitHub Actions Demo
+
 on: [push]
+
 jobs:
+  Code-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: yarn test
+      - run: echo "🎉 Passed the tests."
+
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:

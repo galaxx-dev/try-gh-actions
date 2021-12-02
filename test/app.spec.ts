@@ -2,14 +2,14 @@ import request from 'supertest'
 // import { Express } from 'express-serve-static-core'
 import server from '../src/app'
 
-describe('APP should say "Hello World!"', () => {
+describe('GET: /health', () => {
   // beforeAll(() => {
   //   server = app
   // })
 
-  it('should return 200', done => {
+  it('return 200 + "Hello World!"', done => {
     request(server)
-      .get('/')
+      .get('/health')
       .expect(200)
       .end((err, res) => {
         if (err) return done(err)

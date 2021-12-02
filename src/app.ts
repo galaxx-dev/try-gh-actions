@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", async (_: Request, res: Response): Promise<Response> => {
+app.get("/health", async (_: Request, res: Response): Promise<Response> => {
 	return res.status(200).json({ message: "Hello World!" });
 });
 
