@@ -6,7 +6,7 @@
   "quoteProps": "consistent",
   "bracketSpacing": true,
   "arrowParens": "avoid",
-  "printWidth": 80,
+  "printWidth": 100,
   "tabWidth": 2,
   "bracketSameLine": true
 }
