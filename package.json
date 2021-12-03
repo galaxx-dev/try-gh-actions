@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "ts-node-dev --respawn ./src/index.ts",
-    "dev2": "nodemon ./dist/index.js",
+    "dev": "ts-node-dev --respawn server.ts",
+    "dev2": "nodemon ./dist/app.js",
     "test": "jest",
-    "prettify": "yarn prettier --write ."
+    "prettify": "yarn prettier --write .",
+    "build": "tsc"
   },
   "repository": "https://github.com/galaxx-dev/try-gh-actions.git",
   "author": "Dio Ilham Djatiadi",

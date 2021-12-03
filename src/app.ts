@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express'
 const app = express()
 
 // Body parsing Middleware
-app.use(express.json())
+app.use(express.json({ type: 'application/json' }))
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/health', async (_: Request, res: Response): Promise<Response> => {
