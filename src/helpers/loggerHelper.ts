@@ -1,7 +1,7 @@
 const apiErrorLog = (e: any) => {
-  console.log('-------START OF ERROR')
+  console.log('--> start of error')
   console.error(e)
-  console.log('-------END OF ERROR')
+  console.log('--> end of error')
 }
 
 export { apiErrorLog }

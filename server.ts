@@ -1,6 +1,6 @@
 import app from './src/app'
 
-const PORT = 8000
+const PORT = process.env.PORT
 
 const server = app.listen(PORT, () => {
   console.log(`[SERVER] ⚡ Running on port ${PORT}`)
