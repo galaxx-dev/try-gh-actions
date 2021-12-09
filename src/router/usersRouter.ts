@@ -6,33 +6,15 @@ const usersRouter = Router()
 
 usersRouter
   .route('/')
-  .get(UsersController.index)
-  .post(UsersController.store)
-  .put(notYetImplemented)
-  .patch(notYetImplemented)
-  .delete(notYetImplemented)
-
-usersRouter
-  .route('/create')
-  .get(UsersController.create)
-  .put(notYetImplemented)
-  .patch(notYetImplemented)
-  .delete(notYetImplemented)
+  .get(UsersController.index) // get all
+  .post(UsersController.validate('store'), UsersController.store) // create new one
 
 usersRouter
   .route('/:id')
-  .get(UsersController.show)
+  .get(UsersController.show) // get one
   .post(notYetImplemented)
-  .put(UsersController.update)
-  .patch(UsersController.update)
-  .delete(UsersController.destroy)
-
-usersRouter
-  .route('/:id/edit')
-  .get(UsersController.edit)
-  .post(notYetImplemented)
-  .put(notYetImplemented)
-  .patch(notYetImplemented)
-  .delete(notYetImplemented)
+  .put(UsersController.update) // update one
+  .patch(UsersController.update) // update one
+  .delete(UsersController.destroy) // delete one
 
 export { usersRouter }

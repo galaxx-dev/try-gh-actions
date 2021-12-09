@@ -17,7 +17,8 @@
   "private": false,
   "dependencies": {
     "@prisma/client": "^3.6.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
