@@ -1,13 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express'
 // import passport from 'passport'
 // import { getJwtStrategy, getLocalStrategy } from './middleware/passport'
-import privateRouter from './router/private.routes'
-import publicRouter from './router/public.routes'
+import { publicRouter, privateRouter } from './router/routes'
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   console.log('---')
-  console.log('req')
-  console.log(req.headers)
+  // console.log('req')
+  // console.log(req.headers)
   next()
 }
 
