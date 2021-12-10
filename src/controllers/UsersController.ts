@@ -1,5 +1,6 @@
 import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
+import { determineValByExistence } from 'src/helpers/queryFilter'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
 import prismaClient from '../helpers/prismaHelper'
@@ -8,8 +9,23 @@ const prisma = prismaClient
 
 export default class UsersController {
   public static index = async (req: Request, res: Response): Promise<Response> => {
+    // set default if not provided in query
+    const cursor = determineValByExistence(req.query.cursor, 1)
+    const take = determineValByExistence(req.query.take, 25)
+
     try {
-      const users = await prisma.user.findMany()
+      const users = await prisma.user.findMany({
+        take,
+        cursor: { id: cursor },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          fullName: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      })
 
       if (!users) {
         return apiResponse(res, { statusCode: 400, statusMessage: 'Users empty.' })

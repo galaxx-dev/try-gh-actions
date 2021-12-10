@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import { publicRouter, privateRouter } from './router/routes'
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  console.log('---')
+  console.log('isAuthenticated')
   // console.log('req')
   // console.log(req.headers)
   next()
