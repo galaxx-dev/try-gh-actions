@@ -1,6 +1,5 @@
-import { User } from '.prisma/client'
+import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
-import { body, ValidationChain, validationResult } from 'express-validator'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
 import prismaClient from '../helpers/prismaHelper'
@@ -8,29 +7,6 @@ import prismaClient from '../helpers/prismaHelper'
 const prisma = prismaClient
 
 export default class UsersController {
-  /**
-   * validate method
-   *
-   * @param req Request from express
-   * @param res Response from express
-   * @returns Promise of Response
-   */
-  public static validate = (method: any): ValidationChain[] => {
-    if (method === 'store') {
-      const email = 'email'
-      const name = 'name'
-      return [
-        body(email, 'E-mail is required').exists().trim(),
-        body(email, 'E-mail is invalid').isEmail(),
-        body(name, 'Name is required').exists().trim(),
-        body(name, 'Name is min 2 char').isLength({ min: 2 }),
-        body(name, 'Name is max 50 char').isLength({ max: 50 }),
-      ]
-    }
-
-    return []
-  }
-
   public static index = async (req: Request, res: Response): Promise<Response> => {
     try {
       const users = await prisma.user.findMany()
@@ -58,31 +34,23 @@ export default class UsersController {
     }
   }
 
-  // fo the remaining of time, this method will act as playground for validating data using express-validator
   public static store = async (req: Request, res: Response): Promise<Response> => {
-    const errors = validationResult(req)
+    const { email, username, fullName, password } = req.body as User
 
-    if (!errors.isEmpty()) {
-      return apiResponse(res, {
-        statusCode: 400,
-        statusMessage: 'There is/are error(s)',
-        payload: errors.array(),
-      })
-    }
-
-    const { email, name } = req.body as User
+    const data: Prisma.UserCreateInput = { email, username, fullName, password }
+    const select: Prisma.UserSelect = { id: true, email: true, fullName: true, username: true }
 
     try {
-      const users = await prisma.user.findMany()
+      const user = await prisma.user.create({ data, select })
 
-      if (!users) {
-        return apiResponse(res, { statusCode: 400, statusMessage: 'Users empty.' })
+      if (!user) {
+        return apiResponse(res, { statusCode: 400, statusMessage: 'User is empty.' })
       }
 
       return apiResponse(res, {
         statusCode: 200,
-        statusMessage: 'Users fetched success.',
-        payload: { email, name },
+        statusMessage: 'User successfully created.',
+        payload: user,
       })
     } catch (e) {
       apiErrorLog(e)
