@@ -1,8 +1,12 @@
 import { PrismaClient } from '.prisma/client'
+import { SeedOpts } from './seed'
 
-const generateUsers = async (prisma: PrismaClient) => {
+const seedUsers = async (prisma: PrismaClient, opts: SeedOpts) => {
   const users = []
-  for (let i = 1; i < 11; i++) {
+
+  const finishAt = opts.startFrom + opts.totalData
+
+  for (let i = opts.startFrom; i < finishAt; i++) {
     const user = await prisma.user.upsert({
       create: {
         email: `user${i}@1.com`,
@@ -20,4 +24,4 @@ const generateUsers = async (prisma: PrismaClient) => {
   console.log(users)
 }
 
-export default generateUsers
+export default seedUsers
