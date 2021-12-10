@@ -11,6 +11,9 @@
     "prettify": "yarn prettier --write .",
     "build": "tsc"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed/seed.ts"
+  },
   "repository": "https://github.com/galaxx-dev/try-gh-actions.git",
   "author": "Dio Ilham Djatiadi",
   "license": "MIT",
