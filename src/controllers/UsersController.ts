@@ -1,10 +1,9 @@
-import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
-import { hashPassword } from '../helpers/passwordHelper'
 import prisma from '../helpers/prismaHelper'
 import { determineValByExistence } from '../helpers/queryFilterHelper'
+import AuthController from './AuthController'
 
 export default class UsersController {
   /**
@@ -63,41 +62,9 @@ export default class UsersController {
    * @param res express.Response
    * @returns promise of Response (apiResponse helper)
    */
-  public static store = async (req: Request, res: Response): Promise<Response> => {
-    const { email, username, fullName, password } = req.body as User
-
-    // data for insert
-    const data: Prisma.UserCreateInput = {
-      email,
-      username,
-      fullName,
-      password: await hashPassword(password),
-    }
-
-    // select data back
-    const select: Prisma.UserSelect = { id: true, email: true, fullName: true, username: true }
-
-    try {
-      const user = await prisma.user.create({ data, select })
-
-      if (!user) {
-        return apiResponse(res, { statusCode: 400, statusMessage: 'User is empty.' })
-      }
-
-      return apiResponse(res, {
-        statusCode: 200,
-        statusMessage: 'User successfully created.',
-        payload: user,
-      })
-    } catch (e: any) {
-      apiErrorLog(e)
-
-      return apiResponse(res, {
-        statusCode: 400,
-        errorCode: ErrorCode.USRS_GET_001,
-        statusMessage: e.message || 'Something wrong...',
-      })
-    }
+  public static store = async (req: Request, res: Response) => {
+    // it is the same with register, so for the mean time we reuse register method here
+    AuthController.register(req, res)
   }
 
   /**

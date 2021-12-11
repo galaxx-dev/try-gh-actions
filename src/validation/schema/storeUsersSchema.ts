@@ -2,7 +2,7 @@ import { User } from '.prisma/client'
 import { ParamSchema } from 'express-validator'
 import prisma from '../../helpers/prismaHelper'
 
-type StoreUsersSchema = Partial<Record<keyof User, ParamSchema>>
+type StoreUserSchema = Partial<Record<keyof User, ParamSchema>>
 
 const warnRequiredField = (fieldName: string) => `${fieldName} is required`
 const warnInvalidField = (fieldName: string) => `${fieldName} is invalid`
@@ -45,7 +45,7 @@ const passwordStr = 'Password'
  *     - min numbers    = 1
  *     - min symbols    = 0
  */
-export const storeUsersSchema: StoreUsersSchema = {
+export const storeUserSchema: StoreUserSchema = {
   email: {
     trim: true,
     notEmpty: {

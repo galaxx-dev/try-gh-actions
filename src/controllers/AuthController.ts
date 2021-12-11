@@ -1,9 +1,9 @@
-import { User } from '.prisma/client'
+import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { signJwt } from '../helpers/jwtHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
-import { verifyPassword } from '../helpers/passwordHelper'
+import { hashPassword, verifyPassword } from '../helpers/passwordHelper'
 import prisma from '../helpers/prismaHelper'
 
 export default class AuthController {
@@ -51,6 +51,39 @@ export default class AuthController {
           user: { ...restData },
           accessToken,
         },
+      })
+    } catch (e: any) {
+      apiErrorLog(e)
+
+      return apiResponse(res, {
+        statusCode: 400,
+        errorCode: ErrorCode.USRS_GET_001,
+        statusMessage: e.message || 'Something wrong...',
+      })
+    }
+  }
+
+  public static register = async (req: Request, res: Response): Promise<Response> => {
+    const { email, username, fullName, password } = req.body as User
+
+    // data for insert
+    const data: Prisma.UserCreateInput = {
+      email,
+      username,
+      fullName,
+      password: await hashPassword(password),
+    }
+
+    // select data back
+    const select: Prisma.UserSelect = { id: true, email: true, fullName: true, username: true }
+
+    try {
+      const user = await prisma.user.create({ data, select })
+
+      return apiResponse(res, {
+        statusCode: 200,
+        statusMessage: 'Register success. Please login.',
+        payload: user,
       })
     } catch (e: any) {
       apiErrorLog(e)
