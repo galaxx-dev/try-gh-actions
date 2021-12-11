@@ -15,8 +15,15 @@ export default class UsersController {
    */
   public static index = async (req: Request, res: Response): Promise<Response> => {
     // set default if not provided in query
-    const cursor = determineValByExistence(req.query.cursor, 1)
-    const take = determineValByExistence(req.query.take, 25)
+    const defaultCursor = 1
+    const defaultTotalTake = 25
+    const maxTotalTake = 100
+
+    let cursor = determineValByExistence(req.query.cursor, defaultCursor)
+    let take = determineValByExistence(req.query.take, defaultTotalTake)
+
+    // fallback to default if max exceeded
+    if (take > maxTotalTake) take = defaultTotalTake
 
     try {
       const users = await prisma.user.findMany({

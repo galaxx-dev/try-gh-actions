@@ -30,17 +30,18 @@ export default class AuthController {
       if (!user) throw new Error('Wrong credentials.')
 
       // password didn't match
-      if (!(await verifyPassword(user.password, password))) {
+      const isPasswordMatch = await verifyPassword(user.password, password)
+      if (!isPasswordMatch) {
         throw new Error('Wrong credentials.')
       }
 
-      // opt out password and cast to _, then grab the rest data
-      const { password: _, ...restData } = user
+      // opt out password and cast to _, then grab the rest of cleaned up user
+      const { password: _, ...cleanUser } = user
 
       // sign jwt for auth
-      const accessToken = signJwt({ user: restData })
+      const accessToken = signJwt({ user: cleanUser })
 
-      res.header('Authorization', 'Bearer ' + accessToken)
+      // res.header('Authorization', 'Bearer ' + accessToken) // should we need this? or set it from client?
 
       console.log(accessToken)
 
@@ -48,7 +49,7 @@ export default class AuthController {
         statusCode: 200,
         statusMessage: 'User logged in.',
         payload: {
-          user: { ...restData },
+          user: { ...cleanUser },
           accessToken,
         },
       })

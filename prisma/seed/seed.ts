@@ -6,8 +6,8 @@ const main = async () => {
   const prisma = new PrismaClient()
   try {
     // ---list of seeds u wanna run
-    await seedUsers(prisma, { startFrom: 1, totalData: 10 })
-    await seedUsersWithPosts(prisma, { startFrom: 11, totalData: 10 })
+    await seedUsers(prisma, { startFrom: 1, totalData: 1000 })
+    await seedUsersWithPosts(prisma, { startFrom: 1001, totalData: 1000 })
     // ---end of list
   } catch (e) {
     console.error(e)
