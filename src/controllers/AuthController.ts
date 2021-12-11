@@ -3,9 +3,7 @@ import { Request, Response } from 'express'
 // import passport from 'passport'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
-import prismaClient from '../helpers/prismaHelper'
-
-const prisma = prismaClient
+import prisma from '../helpers/prismaHelper'
 
 // TODO:
 export default class AuthController {

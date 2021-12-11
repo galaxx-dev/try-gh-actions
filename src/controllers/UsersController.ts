@@ -1,14 +1,19 @@
 import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
-import { determineValByExistence } from '../helpers/queryFilterHelper'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
-import prismaClient from '../helpers/prismaHelper'
-import { hashPassword, verifyPassword } from '../helpers/passwordHelper'
-
-const prisma = prismaClient
+import { hashPassword } from '../helpers/passwordHelper'
+import prisma from '../helpers/prismaHelper'
+import { determineValByExistence } from '../helpers/queryFilterHelper'
 
 export default class UsersController {
+  /**
+   * Get all user based on take number and cursor pointer.
+   *
+   * @param req express.Request
+   * @param res express.Response
+   * @returns promise of Response (apiResponse helper)
+   */
   public static index = async (req: Request, res: Response): Promise<Response> => {
     // set default if not provided in query
     const cursor = determineValByExistence(req.query.cursor, 1)
@@ -51,6 +56,13 @@ export default class UsersController {
     }
   }
 
+  /**
+   * Store a new user.
+   *
+   * @param req express.Request
+   * @param res express.Response
+   * @returns promise of Response (apiResponse helper)
+   */
   public static store = async (req: Request, res: Response): Promise<Response> => {
     const { email, username, fullName, password } = req.body as User
 
@@ -88,6 +100,13 @@ export default class UsersController {
     }
   }
 
+  /**
+   * Get one user by params.id.
+   *
+   * @param req express.Request
+   * @param res express.Response
+   * @returns promise of Response (apiResponse helper)
+   */
   public static show = async (req: Request, res: Response): Promise<Response> => {
     // set default if not provided in params (user start with id === 1, so 0 always empty)
     const userId = determineValByExistence(req.params.id, 0)

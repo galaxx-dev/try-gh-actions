@@ -1,10 +1,8 @@
 import { User } from '.prisma/client'
 import { ParamSchema } from 'express-validator'
-import prismaClient from '../../helpers/prismaHelper'
+import prisma from '../../helpers/prismaHelper'
 
 type StoreUsersSchema = Partial<Record<keyof User, ParamSchema>>
-
-const prisma = prismaClient
 
 const warnRequiredField = (fieldName: string) => `${fieldName} is required`
 const warnInvalidField = (fieldName: string) => `${fieldName} is invalid`
