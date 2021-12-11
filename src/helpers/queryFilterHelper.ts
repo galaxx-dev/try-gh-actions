@@ -9,8 +9,8 @@
 export const determineValByExistence = (reqQuery: any, defaultValue: number): number => {
   let queryValue = reqQuery ? Number(reqQuery) : undefined
 
-  // change value to default if queryValue type is not 'number'
-  if (typeof queryValue !== 'number') queryValue = defaultValue
+  // return from query if queryValue exist and is a number
+  if (queryValue && !isNaN(queryValue)) return queryValue
 
-  return queryValue
+  return defaultValue
 }
