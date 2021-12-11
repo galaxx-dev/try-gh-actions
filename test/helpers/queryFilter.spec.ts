@@ -1,8 +1,9 @@
 import request from 'supertest'
-import app from '../server'
+import app from '../../server'
+import { ResStructure } from '../../src/helpers/apiHelper'
 
-describe('GET: /health', () => {
-  const endpoint = '/api/health'
+describe('GET: /api/users', () => {
+  const endpoint = '/api/users'
 
   it('return 200', done => {
     request(app).get(endpoint).expect(200, done)
@@ -16,13 +17,16 @@ describe('GET: /health', () => {
       .expect(200, done)
   })
 
-  it('echo "Hello World!"', done => {
+  it('responds with object', done => {
     request(app)
       .get(endpoint)
       .expect(200)
       .end((err, res) => {
         if (err) return done(err)
-        expect(res.body).toMatchObject({ message: `Hello World!` })
+        expect(res.body).toContain<ResStructure>({
+          statusCode: 200,
+          statusMessage: 'Users fetched success.',
+        })
         done()
       })
   })
