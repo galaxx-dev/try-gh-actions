@@ -89,13 +89,13 @@ export default class UsersController {
         statusMessage: 'User successfully created.',
         payload: user,
       })
-    } catch (e) {
+    } catch (e: any) {
       apiErrorLog(e)
 
       return apiResponse(res, {
         statusCode: 400,
         errorCode: ErrorCode.USRS_GET_001,
-        statusMessage: 'Something wrong...',
+        statusMessage: e.message || 'Something wrong...',
       })
     }
   }

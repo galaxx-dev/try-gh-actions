@@ -1,5 +1,5 @@
 import { Router } from 'express'
-// import { authRouter } from './authRouter'
+import { authRouter } from './authRouter'
 import { healthRouter } from './healthRouter'
 import { usersRouter } from './usersRouter'
 
@@ -8,6 +8,7 @@ import { usersRouter } from './usersRouter'
 //
 const publicRouter = Router()
 publicRouter.use('/health', healthRouter)
+publicRouter.use('/auth', authRouter)
 
 //
 // PRIVATE

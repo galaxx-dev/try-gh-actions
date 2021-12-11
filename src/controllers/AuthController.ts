@@ -1,61 +1,64 @@
+import { User } from '.prisma/client'
 import { Request, Response } from 'express'
-// import jwt, { Algorithm, Secret } from 'jsonwebtoken'
-// import passport from 'passport'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
+import { signJwt } from '../helpers/jwtHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
+import { verifyPassword } from '../helpers/passwordHelper'
 import prisma from '../helpers/prismaHelper'
 
-// TODO:
 export default class AuthController {
   /**
-   * login main page
+   * Login and send token for stay logged in.
    *
-   * @param req Request from express
-   * @param res Response from express
-   * @returns Promise of Response
+   * @param req express.Request
+   * @param res express.Response
+   * @returns promise of Response (apiResponse helper)
    */
-  public static index = async (req: Request, res: Response): Promise<Response> => {
+  public static login = async (req: Request, res: Response): Promise<Response> => {
+    const { username, password } = req.body as User
+
     try {
+      if (!username) throw new Error('Provide a valid username.')
+      if (!password) throw new Error('Provide a password.')
+
+      const user = await prisma.user.findUnique({
+        where: { username },
+        select: { id: true, username: true, fullName: true, password: true },
+      })
+
+      // username is not found
+      if (!user) throw new Error('Wrong credentials.')
+
+      // password didn't match
+      if (!(await verifyPassword(user.password, password))) {
+        throw new Error('Wrong credentials.')
+      }
+
+      // opt out password and cast to _, then grab the rest data
+      const { password: _, ...restData } = user
+
+      // sign jwt for auth
+      const accessToken = signJwt({ user: restData })
+
+      res.header('Authorization', 'Bearer ' + accessToken)
+
+      console.log(accessToken)
+
       return apiResponse(res, {
         statusCode: 200,
-        statusMessage: 'Login page',
+        statusMessage: 'User logged in.',
+        payload: {
+          user: { ...restData },
+          accessToken,
+        },
       })
-    } catch (e) {
+    } catch (e: any) {
       apiErrorLog(e)
 
       return apiResponse(res, {
         statusCode: 400,
-        errorCode: ErrorCode.TEMPLATE_001,
-        statusMessage: 'Something wrong...',
-      })
-    }
-  }
-
-  /**
-   * post a login information
-   *
-   * @param req Request from express
-   * @param res Response from express
-   * @returns Promise of Response
-   */
-  public static store = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const user = await prisma.user.findUnique({ where: { email: req.body.email } })
-
-      if (!user) return apiResponse(res, { statusCode: 400, statusMessage: 'User not found.' })
-
-      return apiResponse(res, {
-        statusCode: 200,
-        statusMessage: 'User fetched success.',
-        payload: user,
-      })
-    } catch (e) {
-      apiErrorLog(e)
-
-      return apiResponse(res, {
-        statusCode: 400,
-        errorCode: ErrorCode.TEMPLATE_001,
-        statusMessage: 'Something wrong...',
+        errorCode: ErrorCode.USRS_GET_001,
+        statusMessage: e.message || 'Something wrong...',
       })
     }
   }
