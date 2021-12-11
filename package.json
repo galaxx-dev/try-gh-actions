@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "ts-node-dev --respawn server.ts",
-    "dev2": "nodemon ./dist/server.js",
+    "dev": "ts-node-dev --respawn ./app.ts",
+    "dev2": "nodemon ./dist/app.js",
     "test": "jest",
     "prettify": "yarn prettier --write .",
     "build": "tsc"
