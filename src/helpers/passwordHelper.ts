@@ -8,7 +8,12 @@ import argon2 from 'argon2'
  * @returns hashed password to store on DB
  */
 export const hashPassword = async (rawString: string): Promise<string> => {
-  return await argon2.hash(rawString, { type: 2 })
+  try {
+    return await argon2.hash(rawString, { type: 2 })
+  } catch (e) {
+    console.error(e)
+    throw new Error('Something bad happens. Contact admin to solve this.')
+  }
 }
 
 /**
@@ -20,5 +25,10 @@ export const hashPassword = async (rawString: string): Promise<string> => {
  * @returns match or not
  */
 export const verifyPassword = async (hashed: string, rawString: string): Promise<boolean> => {
-  return await argon2.verify(hashed, rawString, { type: 2 })
+  try {
+    return await argon2.verify(hashed, rawString, { type: 2 })
+  } catch (e) {
+    console.error(e)
+    throw new Error('Something bad happens. Contact admin to solve this.')
+  }
 }
