@@ -15,7 +15,7 @@ export enum ErrorCode {
   'USRS_POST_002' = 'USRS_POST_002',
 }
 
-interface ResStructure {
+export interface ResStructure {
   statusCode: number
   statusMessage: string
   payload?: any

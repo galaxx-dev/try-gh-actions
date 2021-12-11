@@ -1,4 +1,5 @@
 import { PrismaClient } from '.prisma/client'
+import { hashPassword } from '../../src/helpers/passwordHelper'
 import { SeedOpts } from './seed'
 
 const seedUsersWithPosts = async (prisma: PrismaClient, opts: SeedOpts) => {
@@ -10,7 +11,7 @@ const seedUsersWithPosts = async (prisma: PrismaClient, opts: SeedOpts) => {
     const email = `user${i}@1.com`
     const username = `user${i}`
     const fullName = `User ke-${i}`
-    const password = `123123`
+    const password = await hashPassword(`123123`)
 
     const user = await prisma.user.upsert({
       create: {

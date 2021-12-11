@@ -20,6 +20,8 @@
   "private": false,
   "dependencies": {
     "@prisma/client": "^3.6.0",
+    "@types/argon2": "^0.15.0",
+    "argon2": "^0.28.3",
     "express": "^4.17.1",
     "express-validator": "^6.13.0"
   },

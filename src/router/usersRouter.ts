@@ -16,8 +16,8 @@ usersRouter
   .route('/:id')
   .get(UsersController.show) // get one
   .post(notYetImplemented)
-  .put(UsersController.update) // update one
-  .patch(UsersController.update) // update one
-  .delete(UsersController.destroy) // delete one
+  // .put(UsersController.update) // update one
+  // .patch(UsersController.update) // update one
+  // .delete(UsersController.destroy) // delete one
 
 export { usersRouter }

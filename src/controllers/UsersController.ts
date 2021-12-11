@@ -1,9 +1,10 @@
 import { Prisma, User } from '.prisma/client'
 import { Request, Response } from 'express'
-import { determineValByExistence } from 'src/helpers/queryFilter'
+import { determineValByExistence } from '../helpers/queryFilterHelper'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
 import prismaClient from '../helpers/prismaHelper'
+import { hashPassword, verifyPassword } from '../helpers/passwordHelper'
 
 const prisma = prismaClient
 
@@ -53,7 +54,15 @@ export default class UsersController {
   public static store = async (req: Request, res: Response): Promise<Response> => {
     const { email, username, fullName, password } = req.body as User
 
-    const data: Prisma.UserCreateInput = { email, username, fullName, password }
+    // data for insert
+    const data: Prisma.UserCreateInput = {
+      email,
+      username,
+      fullName,
+      password: await hashPassword(password),
+    }
+
+    // select data back
     const select: Prisma.UserSelect = { id: true, email: true, fullName: true, username: true }
 
     try {
@@ -80,12 +89,13 @@ export default class UsersController {
   }
 
   public static show = async (req: Request, res: Response): Promise<Response> => {
-    const userId = Number(req.params.id)
+    // set default if not provided in params (user start with id === 1, so 0 always empty)
+    const userId = determineValByExistence(req.params.id, 0)
 
     try {
       const user = await prisma.user.findUnique({ where: { id: userId } })
 
-      if (!user) throw Error('User not found.')
+      if (!user) throw new Error('User not found.')
 
       return apiResponse(res, {
         statusCode: 200,
@@ -103,6 +113,6 @@ export default class UsersController {
     }
   }
 
-  public static update = async (req: Request, res: Response): Promise<Response> => {}
-  public static destroy = async (req: Request, res: Response): Promise<Response> => {}
+  // public static update = async (req: Request, res: Response): Promise<Response> => {}
+  // public static destroy = async (req: Request, res: Response): Promise<Response> => {}
 }
