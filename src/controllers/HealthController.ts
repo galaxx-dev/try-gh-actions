@@ -2,6 +2,13 @@ import { Request, Response } from 'express'
 import { apiResponse, ErrorCode } from '../helpers/apiHelper'
 import { apiErrorLog } from '../helpers/loggerHelper'
 
+/**
+ * Check the server health by sending back a proper json message and log them.
+ *
+ * @param _ express.Request
+ * @param res express.Response
+ * @returns promise of Response (apiResponse helper)
+ */
 export default class HealthController {
   public static get = async (_: Request, res: Response): Promise<Response> => {
     try {
